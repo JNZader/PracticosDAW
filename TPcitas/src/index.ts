@@ -9,13 +9,13 @@ const PORT = process.env.PORT || 3000;
 async function main() {
     try {
         await AppDataSource.initialize();
-        console.log("Data Source has been initialized!");
+        console.log("Base de datos inicializada!");
 
         app.listen(PORT, () => {
-            console.log(`Server running on http://localhost:${PORT}`);
+            console.log(`Server corriendo en http://localhost:${PORT}`);
         });
     } catch (error) {
-        console.error("Error during Data Source initialization", error);
+        console.error("Error durante la inicializacion de la base de datos", error);
         process.exit(1);
     }
 }

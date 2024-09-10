@@ -1,29 +1,15 @@
-import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { PrimaryGeneratedColumn, Column } from "typeorm";
 
 export abstract class BaseEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ name: 'id' })
     private _id: number;
 
-    @CreateDateColumn()
-    private createAt: Date;
-
-    @UpdateDateColumn()
-    private updateAt: Date;
-
-    @Column()
+    @Column({ name: 'estado'})
     private estado: Boolean;
 
     // Getters
     get id(): number {
         return this._id;
-    }
-
-    get CreateAt(): Date {
-        return this.createAt;
-    }
-
-    get UpdateAt(): Date {
-        return this.updateAt;
     }
 
     get Estado(): Boolean {
@@ -33,14 +19,6 @@ export abstract class BaseEntity {
     // Setters
     set id(id: number) {
         this._id = id;
-    }
-
-    set CreateAt(createAt: Date) {
-        this.createAt = createAt;
-    }
-
-    set UpdateAt(updateAt: Date) {
-        this.updateAt = updateAt;
     }
 
     set Estado(estado: boolean) {

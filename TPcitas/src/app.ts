@@ -1,10 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import cursoRoutes from './routes/cursosRoutes';
-import cursoEstudianteRoutes from './routes/cursoEstudianteRoutes';
-import estudianteRoutes from './routes/estudianteRoutes';
-import profesorRoutes from './routes/profesoresRoutes';
+import clienteRoutes from './routes/clienteRoutes';
+import citaRoutes from './routes/citaRoutes';
 import { errorHandlerMiddleware } from './database/errorHandler';
 
 const app = express();
@@ -15,10 +13,8 @@ app.use(cors());
 app.use(morgan('dev'));
 
 // Rutas
-app.use('/cursos', cursoRoutes);
-app.use('/cursos-estudiantes', cursoEstudianteRoutes);
-app.use('/estudiantes', estudianteRoutes);
-app.use('/profesores', profesorRoutes);
+app.use('/cliente', clienteRoutes);
+app.use('/cita', citaRoutes);
 
 // Middleware de manejo de errores
 app.use(errorHandlerMiddleware);
