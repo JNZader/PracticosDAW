@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { CitaController } from "../controllers/CitaController";
 import { CitaService } from "../services/CitaService";
+import { Cita } from "../models/entities/cita";
+import { AppDataSource } from "../database/data-source";
 
 const router = Router();
-const citaController = new CitaController(new CitaService());
+const citaController = new CitaController(new CitaService(Cita, AppDataSource));
 
 router
   .route("/")

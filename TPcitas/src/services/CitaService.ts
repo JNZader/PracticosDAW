@@ -1,29 +1,56 @@
-import { Cita } from "../models/cita";
-import { CitaRepository } from "../repositories/repositories";
+import { Cita } from "../models/entities/cita";
+import { CitaDTO } from "../models/dtos/citadto";
+import { BaseService } from "./BaseService";
+import { Cliente } from "../models/entities/cliente";
 
-export class CitaService {
+export class CitaService extends BaseService<Cita>{
   async findAll(): Promise<Cita[]> {
-    return CitaRepository.find();
-  }
+    return await (await this.execRepository).find({
+      relations: ['cliente'], 
+    });  }
 
   async findOne(id: number): Promise<Cita | null> {
-    return CitaRepository.findOneBy({ id });
+    return (await this.execRepository).findOneBy({ id });
   }
 
-  async create(cursoEstudiante: Partial<Cita>): Promise<Cita> {
-    const newCursoEstudiante = CitaRepository.create(cursoEstudiante);
-    return CitaRepository.save(newCursoEstudiante);
+  async create(cita: CitaDTO): Promise<Cita> {
+
+    const cliente = await (await this.execRepository).manager.findOne(Cliente, { where: { id: cita.clienteId }});
+    
+    if (!cliente) {
+      throw new Error("Cliente no encontrado");
+    }
+
+    const newCita = (await this.execRepository).create({
+      fecha: cita.fecha,
+      motivo: cita.motivo,
+      cliente: cliente, 
+    });
+
+    return (await this.execRepository).save(newCita);
   }
 
-  async update(
-    id: number,
-    cursoEstudiante: Partial<Cita>
-  ): Promise<Cita | null> {
-    await CitaRepository.update(id, cursoEstudiante);
+  async update(id: number, cita: CitaDTO): Promise<Cita | null> {
+
+    const cliente = await (await this.execRepository).manager.findOne(Cliente, { where: { id: cita.clienteId }});
+    
+    if (!cliente) {
+      throw new Error("Cliente no encontrado");
+    }
+
+    const citaToUpdate = {
+      fecha: cita.fecha,
+      motivo: cita.motivo,
+      estado:cita.estado,
+      cliente: cliente
+    };
+
+    await (await this.execRepository).update(id, citaToUpdate);
     return this.findOne(id);
-  }
+}
+
 
   async delete(id: number): Promise<void> {
-    await CitaRepository.delete(id);
+    await (await this.execRepository).delete(id);
   }
 }

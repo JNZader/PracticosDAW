@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { ClienteController } from "../controllers/ClienteController";
 import { ClienteService } from "../services/ClienteService";
+import { Cliente } from "../models/entities/cliente";
+import { AppDataSource } from "../database/data-source";
 
 const router = Router();
-const clienteController = new ClienteController(new ClienteService());
+const clienteController = new ClienteController(new ClienteService(Cliente,AppDataSource));
 
 router
   .route("/")

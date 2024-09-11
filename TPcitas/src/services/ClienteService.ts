@@ -1,26 +1,26 @@
-import { ClienteRepository } from "../repositories/repositories";
-import { Cliente } from "../models/cliente";
+import { Cliente } from "../models/entities/cliente";
+import { BaseService } from "./BaseService";
 
-export class ClienteService {
+export class ClienteService extends BaseService<Cliente> {
   async findAll(): Promise<Cliente[]> {
-    return ClienteRepository.find();
+    return (await this.execRepository).find();
   }
 
   async findOne(id: number): Promise<Cliente | null> {
-    return ClienteRepository.findOneBy({ id });
+    return (await this.execRepository).findOneBy({ id });
   }
 
   async create(curso: Partial<Cliente>): Promise<Cliente> {
-    const newCurso = ClienteRepository.create(curso);
-    return ClienteRepository.save(newCurso);
+    const newCurso = (await this.execRepository).create(curso);
+    return (await this.execRepository).save(newCurso);
   }
 
   async update(id: number, curso: Partial<Cliente>): Promise<Cliente | null> {
-    await ClienteRepository.update(id, curso);
-    return ClienteRepository.findOneBy({ id });
+    await (await this.execRepository).update(id, curso);
+    return this.findOne(id);
   }
 
   async delete(id: number): Promise<void> {
-    await ClienteRepository.delete(id);
+    await (await this.execRepository).delete(id);
   }
 }
